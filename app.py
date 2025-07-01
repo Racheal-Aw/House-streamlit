@@ -9,7 +9,7 @@ We have trained several models to predict the price of a house based on features
 """)
 
 import pickle
-model = pickle.load(open("C:\\Users\\awolo\\Downloads\\trained_pipe_knn.sav", 'rb'))
+model = pickle.load(open("trained_pipe_knn.sav", 'rb'))
 
 import pandas as pd
 new_house = pd.DataFrame({
@@ -24,7 +24,7 @@ prediction = model.predict(new_house)
 st.write("The price of the house is:", prediction)
 
 import pickle
-model = pickle.load(open("C:\\Users\\awolo\\Downloads\\trained_pipe_knn.sav", 'rb'))
+model = pickle.load(open("trained_pipe_knn.sav", 'rb'))
 
 LotArea = st.number_input("Lot Area")
 TotalBsmtSF = st.number_input("Basement Square Feet")
