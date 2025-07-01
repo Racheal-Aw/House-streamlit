@@ -1,44 +1,37 @@
 import streamlit as st
+import pandas as pd
+import pickle
 
-st.title("Housing Prices Prediction")
+# App title and description
+st.title("🏡 Housing Prices Prediction")
 
 st.write("""
-### Project description
-We have trained several models to predict the price of a house based on features such as the area of the house and the condition and quality of their different rooms.
-
+### Project Description
+We trained a KNN model to predict house prices based on:
+- Lot Area
+- Basement Square Feet
+- Number of Bedrooms
+- Garage Capacity
 """)
 
-import pickle
-model = pickle.load(open("trained_pipe_knn.sav", 'rb'))
+# Load the model once
+with open("trained_pipe_knn.sav", 'rb') as f:
+    model = pickle.load(f)
 
-import pandas as pd
-new_house = pd.DataFrame({
-    'LotArea':[9000],
-    'TotalBsmtSF':[1000],
-    'BedroomAbvGr':[5],
-    'GarageCars':[4]
-})
+# User input
+LotArea = st.number_input("Lot Area (sq ft)", min_value=0)
+TotalBsmtSF = st.number_input("Basement Area (sq ft)", min_value=0)
+BedroomAbvGr = st.number_input("Number of Bedrooms", min_value=0)
+GarageCars = st.number_input("Garage Capacity (cars)", min_value=0)
 
-prediction = model.predict(new_house)
+# Predict button
+if st.button("Predict House Price"):
+    new_data = pd.DataFrame({
+        'LotArea': [LotArea],
+        'TotalBsmtSF': [TotalBsmtSF],
+        'BedroomAbvGr': [BedroomAbvGr],
+        'GarageCars': [GarageCars]
+    })
 
-st.write("The price of the house is:", prediction)
-
-import pickle
-model = pickle.load(open("trained_pipe_knn.sav", 'rb'))
-
-LotArea = st.number_input("Lot Area")
-TotalBsmtSF = st.number_input("Basement Square Feet")
-BedroomAbvGr = st.number_input("Number of Bedrooms")
-GarageCars = st.number_input("Car spaces in Garage")
-
-import pandas as pd
-new_house = pd.DataFrame({
-    'LotArea':[LotArea],
-    'TotalBsmtSF':[TotalBsmtSF],
-    'BedroomAbvGr':[BedroomAbvGr],
-    'GarageCars':[GarageCars]
-})
-
-prediction = model.predict(new_house)
-
-st.write("The price of the house is:", prediction)
+    prediction = model.predict(new_data)
+    st.success(f"🏠 Estimated House Price: ${prediction[0]:,.2f}")
